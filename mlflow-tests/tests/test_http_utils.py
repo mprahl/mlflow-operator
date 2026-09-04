@@ -14,15 +14,18 @@ def create_experiments_and_runs() -> dict:
 def test_configure_ca_bundle_environment(monkeypatch):
     ca_bundle = "/tmp/test-ca-bundle.crt"
     monkeypatch.setattr(Config, "CA_BUNDLE", ca_bundle)
-
-    configure_ca_bundle_environment()
-
-    for name in (
+    bundle_variables = (
         "SSL_CERT_FILE",
         "REQUESTS_CA_BUNDLE",
         "CURL_CA_BUNDLE",
         "AWS_CA_BUNDLE",
-    ):
+    )
+    for name in bundle_variables:
+        monkeypatch.setenv(name, os.environ.get(name, ""))
+
+    configure_ca_bundle_environment()
+
+    for name in bundle_variables:
         assert os.environ[name] == ca_bundle
 
 
