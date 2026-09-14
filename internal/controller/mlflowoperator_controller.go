@@ -211,7 +211,8 @@ func (r *MLflowOperatorReconciler) reconcileMetricsServiceMonitor(ctx context.Co
 }
 
 func schemeHTTPS() *monitoringv1.Scheme {
-	scheme := monitoringv1.SchemeHTTPS
+	// The RHOAI ServiceMonitor CRD accepts only the lowercase wire value.
+	scheme := monitoringv1.Scheme("https")
 	return &scheme
 }
 
